@@ -4,17 +4,12 @@
   "description": "Airtable Formula Manipulator",
   "main": "lib/index.js",
   "scripts": {
-    "build": "babel src --extensions '.ts' --out-dir lib",
+    "build": "tsc",
     "test": "jest",
     "update-reference": "ts-node parser/index.ts https://support.airtable.com/hc/en-us/articles/203255215-Formula-field-reference > src/airtable-formula-reference.json"
   },
   "license": "MIT",
   "devDependencies": {
-    "@babel/cli": "^7.13.10",
-    "@babel/core": "^7.13.10",
-    "@babel/plugin-transform-typescript": "^7.13.0",
-    "@babel/preset-env": "^7.13.12",
-    "@babel/preset-typescript": "^7.13.0",
     "@types/jest": "^26.0.21",
     "@types/jquery": "^3.5.5",
     "@types/jsdom": "^16.2.7",
@@ -34,7 +29,9 @@
     "typescript": "^4.2.3"
   },
   "dependencies": {
-    "@babel/polyfill": "^7.12.1",
     "ajv": "^8.0.3"
-  }
+  },
+  "files": [
+    "lib"
+  ]
 }
