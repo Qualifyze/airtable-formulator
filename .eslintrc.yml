@@ -13,5 +13,9 @@ parserOptions:
 plugins:
   - '@typescript-eslint'
   - 'prettier'
+ignorePatterns:
+  - "lib/*"
+  - "**/node_modules/*"
 rules:
   "prettier/prettier": "error"
+

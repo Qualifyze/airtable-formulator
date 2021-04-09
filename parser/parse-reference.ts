@@ -43,8 +43,8 @@ function listOperators($: JQueryElement): string[] {
 }
 
 export type AirtableReference = {
-  functions: { [functionName: string]: {} };
-  operators: { [operatorSymbol: string]: {} };
+  functions: { [functionName: string]: Record<string, never> };
+  operators: { [operatorSymbol: string]: Record<string, never> };
 };
 
 function isSane({

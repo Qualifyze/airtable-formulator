@@ -5,6 +5,7 @@
   "main": "lib/index.js",
   "scripts": {
     "build": "tsc",
+    "lint": "eslint .",
     "test": "jest",
     "update-reference": "ts-node parser/index.ts https://support.airtable.com/hc/en-us/articles/203255215-Formula-field-reference > src/airtable-formula-reference.json"
   },
