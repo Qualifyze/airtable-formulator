@@ -1,0 +1,16 @@
+name: Test
+on: push
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install modules
+        run: npm install
+      - name: Run Linter
+        run: npm run lint
+      - name: Run Tests
+        run: npm run test
+      - name: Run Build
+        run: npm run build
+      - uses: ./.github/actions/check_integrity

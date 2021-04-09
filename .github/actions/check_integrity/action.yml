@@ -1,0 +1,17 @@
+name: Check GIT Integrity
+description: Checks if any actions in the CI have break the immutability of GIT repository files
+
+runs:
+  using: "composite"
+  steps:
+    - name: Check integrity
+      shell: bash
+      run: |
+        if git diff --no-ext-diff --quiet --exit-code ; then
+          echo "No files have been changed locally"
+          exit 0
+        else
+          echo "Run install/test/build locally and ensure that all unstaged changes are either added to the repository or to .gitignore:"
+          git diff --exit-code
+          exit 1
+        fi
