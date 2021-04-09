@@ -34,5 +34,20 @@
   },
   "files": [
     "lib"
-  ]
+  ],
+  "directories": {
+    "lib": "lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Qualifyze/airtable-formulator.git"
+  },
+  "keywords": [
+    "airtable"
+  ],
+  "author": "",
+  "bugs": {
+    "url": "https://github.com/Qualifyze/airtable-formulator/issues"
+  },
+  "homepage": "https://github.com/Qualifyze/airtable-formulator#readme"
 }
