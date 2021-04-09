@@ -1,5 +1,5 @@
-airtable-formulator
-===================
+@qualifyze/airtable-formulator
+==============================
 ## What?
 A library that allows you to formulate airtable formulas in a structured rather
 than unstructured notation.

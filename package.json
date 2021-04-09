@@ -1,5 +1,5 @@
 {
-  "name": "airtable-formulator",
+  "name": "@qualifyze/airtable-formulator",
   "version": "1.0.0",
   "description": "Airtable Formula Manipulator",
   "main": "lib/index.js",
