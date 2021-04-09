@@ -1,0 +1,19 @@
+name: Deploy NPM Package
+on:
+  push:
+    branches:
+      - master
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install modules
+        run: npm install
+      - name: Run Tests
+        run: npm run test
+      - name: Run Build
+        run: npm run build
+      - uses: Qualifyze/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
