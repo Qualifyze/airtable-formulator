@@ -49,8 +49,5 @@
   "bugs": {
     "url": "https://github.com/Qualifyze/airtable-formulator/issues"
   },
-  "homepage": "https://github.com/Qualifyze/airtable-formulator#readme",
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
-  }
+  "homepage": "https://github.com/Qualifyze/airtable-formulator#readme"
 }
