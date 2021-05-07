@@ -6,3 +6,8 @@ updates:
       interval: weekly
     reviewers:
       - 'Qualifyze/dev-people'
+registries:
+  npm-npmjs:
+    type: npm-registry
+    url: https://registry.npmjs.org
+    token: 
