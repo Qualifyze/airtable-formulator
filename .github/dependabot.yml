@@ -1,3 +1,8 @@
+  # This file is managed in the repository Qualifyze&#x2F;dev-infrastructure
+  # New updates of this file on  Qualifyze&#x2F;dev-infrastructure will automatically trigger new pull requests to up this file here
+  # You can still add small amendments here, but if any larger divergence is necessary, then it would be recommended
+  # to either disable this push-template in Qualifyze&#x2F;dev-infrastructure, or if this change is applicable to all repositories,
+  # edit it here https:&#x2F;&#x2F;github.com&#x2F;Qualifyze&#x2F;dev-infrastructure&#x2F;blob&#x2F;main&#x2F;templates&#x2F;dependabot-npm.
 version: 2
 updates:
   - package-ecosystem: npm
@@ -6,3 +11,8 @@ updates:
       interval: weekly
     reviewers:
       - 'Qualifyze/dev-people'
+registries:
+  npm-npmjs:
+    type: npm-registry
+    url: https://registry.npmjs.org
+    token: {{ secrets.NPM_TOKEN }}
