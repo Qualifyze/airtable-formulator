@@ -7,7 +7,7 @@ function queryHtml(html: string): JQueryElement {
 }
 
 function findTableWithHeader($: JQueryElement, header: string): JQueryElement {
-  return (($ as unknown) as typeof jQuery)(
+  return ($ as unknown as typeof jQuery)(
     `table tbody:has(tr:first:contains("${header}"))`
   ) as JQueryElement;
 }

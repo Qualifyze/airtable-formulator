@@ -27,10 +27,10 @@ describe(`${compile.name}()`, () => {
   });
 
   it("should throw errors on an invalid formula", () => {
-    expect(() => compile((["Santa"] as unknown) as Formula)).toThrowError(
+    expect(() => compile(["Santa"] as unknown as Formula)).toThrowError(
       "must be equal to one of the allowed values"
     );
-    expect(() => compile(((() => ({})) as unknown) as Formula)).toThrowError(
+    expect(() => compile((() => ({})) as unknown as Formula)).toThrowError(
       "Error in validating formula notation"
     );
   });
