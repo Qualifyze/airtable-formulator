@@ -15,7 +15,7 @@
     "@types/jquery": "^3.5.5",
     "@types/jsdom": "^16.2.7",
     "@types/node-fetch": "^2.5.8",
-    "@typescript-eslint/eslint-plugin": "^4.19.0",
+    "@typescript-eslint/eslint-plugin": "^4.26.1",
     "@typescript-eslint/parser": "^4.19.0",
     "eslint": "^7.22.0",
     "eslint-config-prettier": "^8.1.0",
