@@ -1,0 +1,7 @@
+# This file is managed in the repository Qualifyze/dev-infrastructure
+# New updates of this file on  Qualifyze/dev-infrastructure will automatically trigger new pull requests to up this file here
+# You can still add small amendments here, but if any larger divergence is necessary, then it would be recommended
+# to either disable this push-template in Qualifyze/dev-infrastructure, or if this change is applicable to all repositories,
+# edit it here https://github.com/Qualifyze/dev-infrastructure/blob/main/templates/codeowners.
+
+* @qualifyze/dev-people
