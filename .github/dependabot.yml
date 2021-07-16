@@ -6,9 +6,15 @@
 version: 2
 updates:
   - package-ecosystem: npm
+    registries:
+      - npm-npmjs
     directory: '/'
     schedule:
-      interval: weekly
+      interval: monthly
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-patch"]
+    open-pull-requests-limit: 20
     reviewers:
       - 'Qualifyze/dev-people'
 registries:
