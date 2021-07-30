@@ -3,6 +3,9 @@
 # You can still add small amendments here, but if any larger divergence is necessary, then it would be recommended
 # to either disable this push-template in Qualifyze/dev-infrastructure, or if this change is applicable to all repositories,
 # edit it here https://github.com/Qualifyze/dev-infrastructure/blob/main/templates/editor-config.
+
+root = true
+
 [*]
 indent_style = space
 charset = utf-8
