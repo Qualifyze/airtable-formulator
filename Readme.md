@@ -21,7 +21,7 @@ const formula: Formula = ["AND", ["=", {field: "name"}, "Robert"], [">", {field:
 
 ### Install
 ```
-npm install airtable-formulator
+npm install @qualifyze/airtable-formulator
 ```
 
 ### Use
