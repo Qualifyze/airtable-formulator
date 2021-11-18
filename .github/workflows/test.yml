@@ -28,11 +28,9 @@ jobs:
       - name: Test
         run: npm test -- --coverage
 
-      - name: Coverage
-        uses: zgosalvez/github-actions-report-lcov@v1
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
         with:
-          coverage-files: coverage/lcov.info
-          artifact-name: coverage
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Check integrity of repository artifacts
