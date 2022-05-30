@@ -6,19 +6,25 @@ What have you done
 
 why you did it
 
-# How to test ✅
+# Todos before it can be reviewed
 
-The steps someone needs to take to test what you did.
+The things that need to be completed before this can be reviewed:
 
-# What was tested / affected 📝
+<!-- add check boxes here, or remove this section -->
 
-The things / areas affected that were tested or may need to be tested for example:
+<!--  Example:
+- [ ] Merge PR #1337
+- [ ] Make sure main branch CI/CD is complete and succesfull
+- [ ] Rebase this PR against main branch
+-->
 
-- [ ] Link on the audit list for each request should go to audit details (in EN and DE)
-- [ ] Link to change the language in the footer
+# Todos before it can be merged
 
-# Related branches ↖️
+The things that need to be completed before this PR can be merged:
 
-A list of possible branches and related information about them that relate to this PR for example:
+<!-- add check boxes here, or remove this section -->
 
-- [ ] [someLink](someBranch) needs to be merged
+<!--  Example:
+- [ ] Merge PR #1337
+- [ ] Test if X is working properly.
+-->
