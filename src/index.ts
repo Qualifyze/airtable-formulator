@@ -1,3 +1,7 @@
 export * from "./schema";
 export * from "./compiler";
-export * from "./tokenize";
+// For backward compatibility (deprecated)
+export * from "./ast/tokenize";
+// Where it should be...
+import * as ast from "./ast";
+export { ast };

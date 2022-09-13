@@ -1,4 +1,4 @@
-import { operators } from "./airtable-formula-reference.json";
+import { operators } from "../airtable-formula-reference.json";
 
 function escapeRegExp(string: string) {
   return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
