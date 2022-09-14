@@ -1,6 +1,6 @@
 {
   "name": "@qualifyze/airtable-formulator",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "Airtable Formula Manipulator",
   "main": "lib/index.js",
   "scripts": {
@@ -43,7 +43,8 @@
     "url": "git+https://github.com/Qualifyze/airtable-formulator.git"
   },
   "keywords": [
-    "airtable"
+    "airtable",
+    "ast"
   ],
   "author": "",
   "bugs": {
