@@ -784,7 +784,7 @@ describe("tokenize()", () => {
             "value": "
              *  > 100,
             ,
-
+            
           ",
           },
         ],
