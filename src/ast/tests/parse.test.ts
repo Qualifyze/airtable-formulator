@@ -2,6 +2,39 @@ import { expect, it, describe } from "@jest/globals";
 import { parse } from "../parse";
 
 describe("parse()", () => {
+  it("should work with the example in the readme", () => {
+    expect(parse("IF({name}='Robert',{age},0)")).toMatchObject({
+      type: "functionCall",
+      reference: {
+        value: "IF",
+      },
+      argumentList: {
+        args: [
+          {
+            type: "operation",
+            left: {
+              type: "fieldReference",
+              value: "name",
+            },
+            operator: {
+              value: "=",
+            },
+            right: {
+              type: "string",
+              value: "Robert",
+            },
+          },
+          {
+            type: "fieldReference",
+          },
+          {
+            type: "number",
+          },
+        ],
+      },
+    });
+  });
+
   it("should parse empty extremes", () => {
     expect(parse("")).toBeNull();
     expect(parse(" ")).toBeNull();
