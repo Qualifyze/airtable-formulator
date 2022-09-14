@@ -51,3 +51,13 @@ npm run update-reference
 ```
 
 This will update the JSON manifest that lists all available functions and operators.
+
+### Experimental AST Parser
+
+The AST parser is still experimental in the sense it should not be used for critical applications.
+
+```ts
+import { parse } from "airtable-formulator";
+const ast = parse("IF({name}='Robert',{age},0)");
+```
+The parser will for now only output an abstract syntax tree. It will not yet convert it into an object notation formula
