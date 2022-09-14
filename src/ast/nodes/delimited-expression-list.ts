@@ -11,7 +11,7 @@ import {
   Space,
 } from "./primitives";
 import { ExpressionNode, isExpressionNode } from "./expression";
-import { NodeReducer } from "./node-reducer";
+import { eagerlyRepeat, NodeReducer } from "./node-reducer";
 
 export type DelimitedExpressionListMember =
   | ExpressionNode
@@ -121,55 +121,55 @@ function createDelimitedExpressionList(
   };
 }
 
-export const reduceDelimitedExpressionLists: NodeReducer = ([
-  ...nodes
-]: readonly Node[]): Node[] => {
-  const meaningfulNodes = filterMeaningfulNodes(nodes);
+export const reduceDelimitedExpressionLists: NodeReducer = eagerlyRepeat(
+  ([...nodes]) => {
+    const meaningfulNodes = filterMeaningfulNodes(nodes);
 
-  const separator = meaningfulNodes.find(isArgumentSeparator) as
-    | ArgumentSeparator
-    | undefined;
+    const separator = meaningfulNodes.find(isArgumentSeparator) as
+      | ArgumentSeparator
+      | undefined;
 
-  if (separator) {
-    const left = meaningfulNodes[meaningfulNodes.indexOf(separator) - 1];
-    const right = meaningfulNodes[meaningfulNodes.indexOf(separator) + 1];
+    if (separator) {
+      const left = meaningfulNodes[meaningfulNodes.indexOf(separator) - 1];
+      const right = meaningfulNodes[meaningfulNodes.indexOf(separator) + 1];
 
-    if (!left || !right) {
-      throw new Error(
-        createNodeErrorMessage(
-          separator,
-          `expected an expression to the left and right of separator to exist`
-        )
+      if (!left || !right) {
+        throw new Error(
+          createNodeErrorMessage(
+            separator,
+            `expected an expression to the left and right of separator to exist`
+          )
+        );
+      }
+
+      if (!isExpressionNode(left) && !isDelimitedExpressionList(left)) {
+        throw new Error(
+          createNodeErrorMessage(
+            separator,
+            `expected an expression to the left of separator, but got ${left.type}`
+          )
+        );
+      }
+
+      if (!isExpressionNode(right) && !isDelimitedExpressionList(right)) {
+        throw new Error(
+          createNodeErrorMessage(
+            separator,
+            `expected an expression to the right of separator, but got ${right.type}`
+          )
+        );
+      }
+
+      const leftIndex = nodes.indexOf(left);
+      const rightIndex = nodes.indexOf(right);
+
+      nodes.splice(
+        leftIndex,
+        rightIndex - leftIndex + 1,
+        createDelimitedExpressionList([left, separator, right])
       );
     }
 
-    if (!isExpressionNode(left) && !isDelimitedExpressionList(left)) {
-      throw new Error(
-        createNodeErrorMessage(
-          separator,
-          `expected an expression to the left of separator, but got ${left.type}`
-        )
-      );
-    }
-
-    if (!isExpressionNode(right) && !isDelimitedExpressionList(right)) {
-      throw new Error(
-        createNodeErrorMessage(
-          separator,
-          `expected an expression to the right of separator, but got ${right.type}`
-        )
-      );
-    }
-
-    const leftIndex = nodes.indexOf(left);
-    const rightIndex = nodes.indexOf(right);
-
-    nodes.splice(
-      leftIndex,
-      rightIndex - leftIndex + 1,
-      createDelimitedExpressionList([left, separator, right])
-    );
+    return nodes;
   }
-
-  return nodes;
-};
+);
