@@ -11,7 +11,7 @@ import {
 } from "./primitives";
 import { ArgumentListNode, isArgumentListNode } from "./argument-list";
 import { FunctionReference, isFunctionReference } from "./function-reference";
-import { NodeReducer } from "./node-reducer";
+import { eagerlyRepeat, NodeReducer } from "./node-reducer";
 
 const functionCallType = "functionCall";
 
@@ -94,10 +94,7 @@ function createFunctionCall(nodes: Node[]): FunctionCallNode {
   };
 }
 
-export const reduceFunctionCalls: NodeReducer = ([...nodes]: readonly Node[]): (
-  | Node
-  | FunctionCallNode
-)[] => {
+export const reduceFunctionCalls: NodeReducer = eagerlyRepeat(([...nodes]) => {
   const meaningfulNodes = filterMeaningfulNodes(nodes);
 
   const argumentList = meaningfulNodes
@@ -121,4 +118,4 @@ export const reduceFunctionCalls: NodeReducer = ([...nodes]: readonly Node[]): (
   }
 
   return nodes;
-};
+});
