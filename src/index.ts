@@ -1,3 +1,4 @@
 export * from "./schema";
 export * from "./compiler";
-export * from "./ast";
+import * as ast from "./ast";
+export { ast };
