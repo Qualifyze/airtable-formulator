@@ -55,6 +55,24 @@ import { compile } from "airtable-formulator";
 const formulaStr = compile(formula);
 ```
 
+Parse a string formula (experimental):
+
+```ts
+import { parse } from "airtable-formulator";
+
+const formula = parse("AND({name}=\"Robert\",{age}>35)");
+```
+
+The above will yield:
+
+```ts
+[
+  "AND",
+  ["=", { field: "name" }, "Robert"],
+  [">", { field: "age" }, 35],
+]
+```
+
 ### Maintain
 
 If Airtable expends their library of functions and operators that can be used in formulae, run:
