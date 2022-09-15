@@ -8,6 +8,8 @@ function escapeRegExp(string: string) {
 export const operatorMatcher = new RegExp(
   Object.keys(operators)
     .map((op) => escapeRegExp(op))
+    // Sort by length so that longer operators are matched first
+    .sort((a, b) => b.length - a.length)
     .join("|")
 );
 
