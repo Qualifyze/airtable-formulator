@@ -1,5 +1,5 @@
 import { describe, expect, it } from "@jest/globals";
-
+import { operators } from "../airtable-formula-reference.json";
 import { tokenize } from "../tokenize";
 
 describe("tokenize()", () => {
@@ -44,6 +44,18 @@ describe("tokenize()", () => {
         "value": "1 + 2",
       }
     `);
+  });
+
+  it.each(Object.keys(operators))(`should tokenize operator %s`, (op) => {
+    expect(tokenize(`1 ${op} 2`)).toMatchObject({
+      members: [
+        { type: "number", value: "1" },
+        { type: "space", value: " " },
+        { type: "operator", value: op },
+        { type: "space", value: " " },
+        { type: "number", value: "2" },
+      ],
+    });
   });
 
   it("Should tokenize a formula with decimal numbers", () => {
@@ -1109,55 +1121,55 @@ describe("tokenize()", () => {
     // Invalid []
     expect(() => tokenize(`[`)).toThrowErrorMatchingInlineSnapshot(`
       "Syntax error at position 0 for group:
-      	Expected: openDoubleQuote (/\\"/), openSingleQuote (/'/), openParenthesis (/\\\\(/), openBrace (/\\\\{/), closeParenthesis (/\\\\)/), number (/\\\\d+(?:\\\\.\\\\d+)?/), argumentSeparator (/,/), operator (/&|>|<|>=|<=|=|!=|\\\\+|-|\\\\*|\\\\//), reference (/\\\\b[a-z]\\\\w*/i), space (/\\\\s+/), group (/[]/)
+      	Expected: openDoubleQuote (/\\"/), openSingleQuote (/'/), openParenthesis (/\\\\(/), openBrace (/\\\\{/), closeParenthesis (/\\\\)/), number (/\\\\d+(?:\\\\.\\\\d+)?/), argumentSeparator (/,/), operator (/>=|<=|!=|\\\\+|\\\\*|&|>|<|=|-|\\\\//), reference (/\\\\b[a-z]\\\\w*/i), space (/\\\\s+/), group (/[]/)
       	Got: \\"[\\""
     `);
     expect(() => tokenize(`]`)).toThrowErrorMatchingInlineSnapshot(`
       "Syntax error at position 0 for group:
-      	Expected: openDoubleQuote (/\\"/), openSingleQuote (/'/), openParenthesis (/\\\\(/), openBrace (/\\\\{/), closeParenthesis (/\\\\)/), number (/\\\\d+(?:\\\\.\\\\d+)?/), argumentSeparator (/,/), operator (/&|>|<|>=|<=|=|!=|\\\\+|-|\\\\*|\\\\//), reference (/\\\\b[a-z]\\\\w*/i), space (/\\\\s+/), group (/[]/)
+      	Expected: openDoubleQuote (/\\"/), openSingleQuote (/'/), openParenthesis (/\\\\(/), openBrace (/\\\\{/), closeParenthesis (/\\\\)/), number (/\\\\d+(?:\\\\.\\\\d+)?/), argumentSeparator (/,/), operator (/>=|<=|!=|\\\\+|\\\\*|&|>|<|=|-|\\\\//), reference (/\\\\b[a-z]\\\\w*/i), space (/\\\\s+/), group (/[]/)
       	Got: \\"]\\""
     `);
     expect(() => tokenize(`a[1`)).toThrowErrorMatchingInlineSnapshot(`
       "Syntax error at position 1 for group:
-      	Expected: openDoubleQuote (/\\"/), openSingleQuote (/'/), openParenthesis (/\\\\(/), openBrace (/\\\\{/), closeParenthesis (/\\\\)/), number (/\\\\d+(?:\\\\.\\\\d+)?/), argumentSeparator (/,/), operator (/&|>|<|>=|<=|=|!=|\\\\+|-|\\\\*|\\\\//), reference (/\\\\b[a-z]\\\\w*/i), space (/\\\\s+/), group (/[]/)
+      	Expected: openDoubleQuote (/\\"/), openSingleQuote (/'/), openParenthesis (/\\\\(/), openBrace (/\\\\{/), closeParenthesis (/\\\\)/), number (/\\\\d+(?:\\\\.\\\\d+)?/), argumentSeparator (/,/), operator (/>=|<=|!=|\\\\+|\\\\*|&|>|<|=|-|\\\\//), reference (/\\\\b[a-z]\\\\w*/i), space (/\\\\s+/), group (/[]/)
       	Got: \\"[1\\""
     `);
     expect(() => tokenize(`IF[1, 2, 3]`)).toThrowErrorMatchingInlineSnapshot(`
       "Syntax error at position 2 for group:
-      	Expected: openDoubleQuote (/\\"/), openSingleQuote (/'/), openParenthesis (/\\\\(/), openBrace (/\\\\{/), closeParenthesis (/\\\\)/), number (/\\\\d+(?:\\\\.\\\\d+)?/), argumentSeparator (/,/), operator (/&|>|<|>=|<=|=|!=|\\\\+|-|\\\\*|\\\\//), reference (/\\\\b[a-z]\\\\w*/i), space (/\\\\s+/), group (/[]/)
+      	Expected: openDoubleQuote (/\\"/), openSingleQuote (/'/), openParenthesis (/\\\\(/), openBrace (/\\\\{/), closeParenthesis (/\\\\)/), number (/\\\\d+(?:\\\\.\\\\d+)?/), argumentSeparator (/,/), operator (/>=|<=|!=|\\\\+|\\\\*|&|>|<|=|-|\\\\//), reference (/\\\\b[a-z]\\\\w*/i), space (/\\\\s+/), group (/[]/)
       	Got: \\"[1, 2, 3]\\""
     `);
     // Invalid ``
     expect(() => tokenize("`")).toThrowErrorMatchingInlineSnapshot(`
       "Syntax error at position 0 for group:
-      	Expected: openDoubleQuote (/\\"/), openSingleQuote (/'/), openParenthesis (/\\\\(/), openBrace (/\\\\{/), closeParenthesis (/\\\\)/), number (/\\\\d+(?:\\\\.\\\\d+)?/), argumentSeparator (/,/), operator (/&|>|<|>=|<=|=|!=|\\\\+|-|\\\\*|\\\\//), reference (/\\\\b[a-z]\\\\w*/i), space (/\\\\s+/), group (/[]/)
+      	Expected: openDoubleQuote (/\\"/), openSingleQuote (/'/), openParenthesis (/\\\\(/), openBrace (/\\\\{/), closeParenthesis (/\\\\)/), number (/\\\\d+(?:\\\\.\\\\d+)?/), argumentSeparator (/,/), operator (/>=|<=|!=|\\\\+|\\\\*|&|>|<|=|-|\\\\//), reference (/\\\\b[a-z]\\\\w*/i), space (/\\\\s+/), group (/[]/)
       	Got: \\"\`\\""
     `);
     expect(() => tokenize("`Hello World`")).toThrowErrorMatchingInlineSnapshot(`
       "Syntax error at position 0 for group:
-      	Expected: openDoubleQuote (/\\"/), openSingleQuote (/'/), openParenthesis (/\\\\(/), openBrace (/\\\\{/), closeParenthesis (/\\\\)/), number (/\\\\d+(?:\\\\.\\\\d+)?/), argumentSeparator (/,/), operator (/&|>|<|>=|<=|=|!=|\\\\+|-|\\\\*|\\\\//), reference (/\\\\b[a-z]\\\\w*/i), space (/\\\\s+/), group (/[]/)
+      	Expected: openDoubleQuote (/\\"/), openSingleQuote (/'/), openParenthesis (/\\\\(/), openBrace (/\\\\{/), closeParenthesis (/\\\\)/), number (/\\\\d+(?:\\\\.\\\\d+)?/), argumentSeparator (/,/), operator (/>=|<=|!=|\\\\+|\\\\*|&|>|<|=|-|\\\\//), reference (/\\\\b[a-z]\\\\w*/i), space (/\\\\s+/), group (/[]/)
       	Got: \\"\`Hello World\`\\""
     `);
     // Invalid operator %
     expect(() => tokenize(`%`)).toThrowErrorMatchingInlineSnapshot(`
       "Syntax error at position 0 for group:
-      	Expected: openDoubleQuote (/\\"/), openSingleQuote (/'/), openParenthesis (/\\\\(/), openBrace (/\\\\{/), closeParenthesis (/\\\\)/), number (/\\\\d+(?:\\\\.\\\\d+)?/), argumentSeparator (/,/), operator (/&|>|<|>=|<=|=|!=|\\\\+|-|\\\\*|\\\\//), reference (/\\\\b[a-z]\\\\w*/i), space (/\\\\s+/), group (/[]/)
+      	Expected: openDoubleQuote (/\\"/), openSingleQuote (/'/), openParenthesis (/\\\\(/), openBrace (/\\\\{/), closeParenthesis (/\\\\)/), number (/\\\\d+(?:\\\\.\\\\d+)?/), argumentSeparator (/,/), operator (/>=|<=|!=|\\\\+|\\\\*|&|>|<|=|-|\\\\//), reference (/\\\\b[a-z]\\\\w*/i), space (/\\\\s+/), group (/[]/)
       	Got: \\"%\\""
     `);
     expect(() => tokenize(`a%b`)).toThrowErrorMatchingInlineSnapshot(`
       "Syntax error at position 1 for group:
-      	Expected: openDoubleQuote (/\\"/), openSingleQuote (/'/), openParenthesis (/\\\\(/), openBrace (/\\\\{/), closeParenthesis (/\\\\)/), number (/\\\\d+(?:\\\\.\\\\d+)?/), argumentSeparator (/,/), operator (/&|>|<|>=|<=|=|!=|\\\\+|-|\\\\*|\\\\//), reference (/\\\\b[a-z]\\\\w*/i), space (/\\\\s+/), group (/[]/)
+      	Expected: openDoubleQuote (/\\"/), openSingleQuote (/'/), openParenthesis (/\\\\(/), openBrace (/\\\\{/), closeParenthesis (/\\\\)/), number (/\\\\d+(?:\\\\.\\\\d+)?/), argumentSeparator (/,/), operator (/>=|<=|!=|\\\\+|\\\\*|&|>|<|=|-|\\\\//), reference (/\\\\b[a-z]\\\\w*/i), space (/\\\\s+/), group (/[]/)
       	Got: \\"%b\\""
     `);
     // Invalid operator $
     expect(() => tokenize(`$`)).toThrowErrorMatchingInlineSnapshot(`
       "Syntax error at position 0 for group:
-      	Expected: openDoubleQuote (/\\"/), openSingleQuote (/'/), openParenthesis (/\\\\(/), openBrace (/\\\\{/), closeParenthesis (/\\\\)/), number (/\\\\d+(?:\\\\.\\\\d+)?/), argumentSeparator (/,/), operator (/&|>|<|>=|<=|=|!=|\\\\+|-|\\\\*|\\\\//), reference (/\\\\b[a-z]\\\\w*/i), space (/\\\\s+/), group (/[]/)
+      	Expected: openDoubleQuote (/\\"/), openSingleQuote (/'/), openParenthesis (/\\\\(/), openBrace (/\\\\{/), closeParenthesis (/\\\\)/), number (/\\\\d+(?:\\\\.\\\\d+)?/), argumentSeparator (/,/), operator (/>=|<=|!=|\\\\+|\\\\*|&|>|<|=|-|\\\\//), reference (/\\\\b[a-z]\\\\w*/i), space (/\\\\s+/), group (/[]/)
       	Got: \\"$\\""
     `);
     expect(() => tokenize(`a$b`)).toThrowErrorMatchingInlineSnapshot(`
       "Syntax error at position 1 for group:
-      	Expected: openDoubleQuote (/\\"/), openSingleQuote (/'/), openParenthesis (/\\\\(/), openBrace (/\\\\{/), closeParenthesis (/\\\\)/), number (/\\\\d+(?:\\\\.\\\\d+)?/), argumentSeparator (/,/), operator (/&|>|<|>=|<=|=|!=|\\\\+|-|\\\\*|\\\\//), reference (/\\\\b[a-z]\\\\w*/i), space (/\\\\s+/), group (/[]/)
+      	Expected: openDoubleQuote (/\\"/), openSingleQuote (/'/), openParenthesis (/\\\\(/), openBrace (/\\\\{/), closeParenthesis (/\\\\)/), number (/\\\\d+(?:\\\\.\\\\d+)?/), argumentSeparator (/,/), operator (/>=|<=|!=|\\\\+|\\\\*|&|>|<|=|-|\\\\//), reference (/\\\\b[a-z]\\\\w*/i), space (/\\\\s+/), group (/[]/)
       	Got: \\"$b\\""
     `);
   });
