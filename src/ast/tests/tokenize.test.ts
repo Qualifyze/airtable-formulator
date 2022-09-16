@@ -1,5 +1,5 @@
 import { describe, expect, it } from "@jest/globals";
-import { operators } from "../airtable-formula-reference.json";
+import { operators } from "../../airtable-formula-reference.json";
 import { tokenize } from "../tokenize";
 
 describe("tokenize()", () => {
