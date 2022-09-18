@@ -1,11 +1,9 @@
 import { isTokenName, TokenTypeName } from "../../tokenize";
 import { GroupType, isGroupType } from "./group";
 
-export type NodeType =
-  | TokenTypeName
-  | GroupType
-  | "fieldReference"
-  | "functionReference";
+export type ExtendedNodeType = "fieldReference" | "functionReference";
+
+export type NodeType = TokenTypeName | GroupType | ExtendedNodeType;
 
 function isNodeType(type: string): type is NodeType {
   return (
@@ -51,3 +49,5 @@ export function createNodeErrorMessage(
 ): string {
   return `${type} Error while parsing ${node.type} node at position ${node.start}: ${message}`;
 }
+
+export type GetNodeType<T extends Node> = T extends Node<infer U> ? U : never;
