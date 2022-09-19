@@ -8,5 +8,5 @@ export * from "./primitives";
 export * from "./function-call";
 export * from "./function-reference";
 export * from "./field-reference";
-export * from "./delimited-expression-list";
 export * from "./node-reducer";
+export * from "./separate-nodes";

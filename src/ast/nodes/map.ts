@@ -12,7 +12,6 @@ import { ArgumentListNode } from "./argument-list";
 import { ModifierNode } from "./modifier";
 import { EnclosedExpressionNode } from "./enclosed-expression";
 import { FunctionReference } from "./function-reference";
-import { DelimitedExpressionList } from "./delimited-expression-list";
 import { TokenTypeName } from "../tokenize";
 
 /**
@@ -29,7 +28,6 @@ type Map = {
   argumentList: ArgumentListNode;
   modifier: ModifierNode;
   enclosedExpression: EnclosedExpressionNode;
-  delimitedExpressionList: DelimitedExpressionList;
   group: GroupNode;
 };
 
