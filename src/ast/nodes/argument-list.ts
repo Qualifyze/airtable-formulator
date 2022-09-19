@@ -12,22 +12,18 @@ import {
   isReference,
   isEnclosedWithParenthesis,
   createNodeErrorMessage,
+  ArgumentSeparator,
+  isArgumentSeparator,
 } from "./primitives";
 
 import { ExpressionNode, isExpressionNode } from "./expression";
-import {
-  DelimitedExpressionList,
-  isDelimitedExpressionList,
-} from "./delimited-expression-list";
 import { isFunctionReference } from "./function-reference";
 import { NodeReducer } from "./node-reducer";
 
-type ArgumentListMember = DelimitedExpressionList | ExpressionNode | Space;
+type ArgumentListMember = ExpressionNode | ArgumentSeparator | Space;
 
 function isArgumentListMember(node: Node): node is ArgumentListMember {
-  return (
-    isDelimitedExpressionList(node) || isExpressionNode(node) || isSpace(node)
-  );
+  return isArgumentSeparator(node) || isExpressionNode(node) || isSpace(node);
 }
 
 export type ArgumentListGroup<G extends GroupType> = EnclosedGroupNode<
@@ -63,28 +59,71 @@ export function isArgumentListNode(node: Node): node is ArgumentListNode {
   );
 }
 
-function isOpenParenthesis(node: Node): node is TokenNode<"openParenthesis"> {
-  return node.type === "openParenthesis";
+function sliceDelimitedExpression(
+  nodes: readonly Node[],
+  start: number,
+  end?: number
+): ExpressionNode | undefined {
+  const [expression, invalid] = filterMeaningfulNodes(nodes.slice(start, end));
+
+  if (invalid) {
+    throw new Error(
+      createNodeErrorMessage(
+        invalid,
+        `Expected a single expression, but got an extra ${invalid.type}`
+      )
+    );
+  }
+
+  if (expression && !isExpressionNode(expression)) {
+    throw new Error(
+      createNodeErrorMessage(
+        expression,
+        `Expected an expression, but got ${expression.type}`
+      )
+    );
+  }
+
+  return expression;
 }
 
-function isCloseParenthesis(node: Node): node is TokenNode<"closeParenthesis"> {
-  return node.type === "closeParenthesis";
+export function getDelimitedExpressions(
+  nodes: readonly Node[]
+): ExpressionNode[] {
+  const separators = nodes.filter(isArgumentSeparator);
+
+  const expressions: ExpressionNode[] = [];
+
+  const index = separators.reduce((index, separator) => {
+    const separatorIndex = nodes.indexOf(separator);
+
+    const expression = sliceDelimitedExpression(nodes, index, separatorIndex);
+
+    if (expression) {
+      expressions.push(expression);
+    } else {
+      throw new Error(
+        createNodeErrorMessage(
+          separator,
+          `Expected an expression before the argument separator`
+        )
+      );
+    }
+    return separatorIndex + 1;
+  }, 0);
+
+  const lastExpression = sliceDelimitedExpression(nodes, index);
+
+  if (lastExpression) {
+    expressions.push(lastExpression);
+  }
+
+  return expressions;
 }
 
 function createArgumentList(
   group: ArgumentListGroup<"group">
 ): ArgumentListNode {
-  const { opener, closer } = group;
-
-  if (!isOpenParenthesis(opener) || !isCloseParenthesis(closer)) {
-    throw new Error(
-      createNodeErrorMessage(
-        group,
-        `Expected an argument list to be enclosed with parenthesis, but got ${opener.value}${closer.value} instead`
-      )
-    );
-  }
-
   if (!checkArray(group.members, isArgumentListMember)) {
     throw new Error(
       createNodeErrorMessage(
@@ -96,31 +135,14 @@ function createArgumentList(
     );
   }
 
-  const argumentList: Omit<ArgumentListNode, "args"> = {
-    ...createEnclosedGroup("argumentList", group.members, opener, closer),
-  };
-
-  const [expression, invalid]: (ArgumentListMember | undefined)[] =
-    filterMeaningfulNodes(group.members);
-
-  if (invalid) {
-    throw new Error(
-      createNodeErrorMessage(
-        argumentList,
-        `Expected just one delimited expression, got an extra ${invalid.type} at position ${invalid.start}`
-      )
-    );
-  }
-
-  const args: readonly ExpressionNode[] = expression
-    ? isDelimitedExpressionList(expression)
-      ? expression.expressions
-      : [expression]
-    : [];
-
   return {
-    ...argumentList,
-    args,
+    ...createEnclosedGroup(
+      "argumentList",
+      group.members,
+      group.opener,
+      group.closer
+    ),
+    args: getDelimitedExpressions(group.members),
   };
 }
 
@@ -140,7 +162,7 @@ export const reduceArgumentLists: NodeReducer = ([
     if (
       (previousNode && isReference(previousNode)) ||
       filterMeaningfulNodes(candidate.members).length === 0 ||
-      candidate.members.some(isDelimitedExpressionList)
+      candidate.members.some(isArgumentSeparator)
     ) {
       // There must be a previous node, and this node must be a reference
       if (

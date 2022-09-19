@@ -1,26 +1,26 @@
 import { tokenize } from "./tokenize";
 import {
+  composeReducers,
   createNodeErrorMessage,
+  eagerlyRepeat,
   ExpressionNode,
   GroupNode,
   isExpressionNode,
   isGroupNode,
   Node,
-  reduceSpaces,
+  NodeReducer,
   reduceArgumentLists,
-  reduceDelimitedExpressionLists,
   reduceEnclosedExpressions,
   reduceFieldReferences,
   reduceFunctionCalls,
   reduceFunctionReferences,
   reduceModifiers,
   reduceOperations,
-  composeReducers,
-  eagerlyRepeat,
-  NodeReducer,
+  reduceSpaces,
+  separateNodes,
 } from "./nodes";
 
-function groupReducer(reducer: NodeReducer): NodeReducer {
+function reduceGroups(reducer: NodeReducer): NodeReducer {
   // Using named function here as it makes debugging easier
   function reduceGroups(nodes: readonly Node[]): Node[] {
     return nodes.map((node) =>
@@ -34,22 +34,17 @@ function groupReducer(reducer: NodeReducer): NodeReducer {
   return reduceNodes;
 }
 
-const reduceNodes: NodeReducer = groupReducer(
-  composeReducers(
+const reduceNodes: NodeReducer = reduceGroups(
+  separateNodes(
     eagerlyRepeat(
       composeReducers(
-        eagerlyRepeat(
-          composeReducers(
-            reduceFieldReferences,
-            reduceFunctionReferences,
-            reduceModifiers,
-            reduceOperations,
-            reduceArgumentLists
-          )
-        ),
         reduceEnclosedExpressions,
-        reduceFunctionCalls,
-        reduceDelimitedExpressionLists
+        reduceFieldReferences,
+        reduceFunctionReferences,
+        reduceModifiers,
+        reduceOperations,
+        reduceArgumentLists,
+        reduceFunctionCalls
       )
     )
   )
@@ -97,7 +92,7 @@ export function parse(
   }
 
   if (expression && removeSpace) {
-    const [expressionWithoutSpaces] = groupReducer(reduceSpaces)([expression]);
+    const [expressionWithoutSpaces] = reduceGroups(reduceSpaces)([expression]);
     return expressionWithoutSpaces as ExpressionNode;
   }
 
