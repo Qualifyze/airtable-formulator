@@ -8,7 +8,6 @@ export const groupTypes = [
   "functionCall",
   "operation",
   "modifier",
-  "delimitedExpressionList",
 ] as const;
 export type GroupType = typeof groupTypes[number];
 
