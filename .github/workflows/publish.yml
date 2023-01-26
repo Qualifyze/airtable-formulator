@@ -1,17 +1,11 @@
-name: Test
+name: Publish
 
 on:
   push:
-    branches-ignore: [main]
-  # Trigger this workflow on PRs created by Changesets by assigning it to
-  # someone. We need this workaround because PRs created by GitHub Actions do
-  # not trigger workflows per default.
-  pull_request:
     branches: [main]
-    types: [assigned]
 
 jobs:
-  test:
+  publish:
     runs-on: ubuntu-22.04
     steps:
       - name: Check out repository
@@ -24,9 +18,7 @@ jobs:
           cache: npm
 
       - name: Install dependencies
-        # clean-install is faster and validates that package-lock.json matches the dependency definition in package.json
-        # while install afterward with integrity check later ensures that a follow-up PR does not have any pending change.
-        run: npm clean-install && npm install
+        run: npm ci
 
       - name: Lint source code
         run: npm run lint
@@ -36,6 +28,16 @@ jobs:
 
       - name: Build package
         run: npm run build
+
+      - name: Create release PR or publish to NPM
+        uses: changesets/action@e9cc34b540dd3ad1b030c57fd97269e8f6ad905a # v1.4.1
+        with:
+          publish: npm run changeset:publish
+          version: npm run changeset:version
+          title: Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_PUBLISHER_TOKEN }}
 
       - name: Check integrity of repository artifacts
         uses: Qualifyze/check-git-integrity-action@v1

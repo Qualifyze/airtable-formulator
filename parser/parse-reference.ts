@@ -1,21 +1,16 @@
 import { JSDOM } from "jsdom";
 import jQuery from "jquery";
-type JQueryElement = JQuery<JSDOM>;
 
-function queryHtml(html: string): JQueryElement {
-  return jQuery(new JSDOM(html).window);
+function queryHtml(html: string): typeof jQuery {
+  const { window } = new JSDOM(html);
+  return jQuery(window) as unknown as typeof jQuery;
 }
 
-function findTableWithHeader($: JQueryElement, header: string): JQueryElement {
-  return ($ as unknown as typeof jQuery)(
-    `table tbody:has(tr:first:contains("${header}"))`
-  ) as JQueryElement;
+function findTableWithHeader($: typeof jQuery, header: string): JQuery {
+  return $(`table tbody:has(tr:first:contains("${header}"))`);
 }
 
-function getTableColumnContents(
-  $table: JQueryElement,
-  column: number
-): string[] {
+function getTableColumnContents($table: JQuery, column: number): string[] {
   return $table
     .find("tr:not(:first)")
     .find(`td:eq(${column})`)
@@ -30,14 +25,14 @@ function parseFunctionName(prototype: string) {
   return functionName;
 }
 
-function listFunctions($: JQueryElement): string[] {
+function listFunctions($: typeof jQuery): string[] {
   const $tables = findTableWithHeader($, "Function");
   const prototypes = getTableColumnContents($tables, 0);
 
   return prototypes.map((prototype) => parseFunctionName(prototype));
 }
 
-function listOperators($: JQueryElement): string[] {
+function listOperators($: typeof jQuery): string[] {
   const $tables = findTableWithHeader($, "Operator");
   return getTableColumnContents($tables, 0);
 }
