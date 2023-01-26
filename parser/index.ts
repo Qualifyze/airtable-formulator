@@ -1,5 +1,4 @@
 import { parseReference } from "./parse-reference";
-import fetch from "node-fetch";
 
 const [, , url] = process.argv;
 
